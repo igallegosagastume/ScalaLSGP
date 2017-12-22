@@ -21,8 +21,8 @@ import java.awt.Dimension
 class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
   private val tensor = new Tensor[Int](size=order, nullElem=0)//uses a tensor of Int to store elements
   var proper : Boolean = true //it begins from a proper cube
-  private var improperCell : OrderedTriple[Int,Int,Int] = null    //no improper cell at the beggining
-  private val opts = new DrawingOptions
+  protected var improperCell : OrderedTriple[Int,Int,Int] = null    //no improper cell at the beggining
+  protected val opts = new DrawingOptions
   
   init(true)
   
@@ -236,13 +236,14 @@ class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
 	 * @return String
 	 */
 	override def toString() :String = {
-		tensor.toString()/*
+//		tensor.toString()
 		if (proper) {
-			return toStringOfProper();
+			return toStringOfProper()
 		}
-		val sb = new StringBuffer();
-		sb.append("Incidence cube of size "+n+":\n");
-		for (x <-0 to (order-1)) {
+		val sb = new StringBuffer()
+		sb.append("Incidence cube of size "+order+":\n")
+		var x = order-1
+		while (x >=0) {//the first upper line is the n-1 x coordinate
 			for (y <-0 to (order-1)) {
 				try {
 					var z:String = "";
@@ -253,13 +254,12 @@ class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
 						z = "{";
 						
 						if(coordZ>=0) 
-							z+="-"+Integer.toString(coordZ);
+							z+="-"+Integer.toString(coordZ)
 						else
-							z+=Integer.toString(coordZ);
+							z+=Integer.toString(coordZ)
 						
-						z2:Int,z3;//TODO: Complete
-						z2 = this.plusOneZCoordOf(x, y);
-						z3 = this.secondPlusOneZCoordOf(x, y);	
+						var z2:Int = this.plusOneZCoordOf(x, y)
+						var z3:Int = this.secondPlusOneZCoordOf(x, y)
 						
 						z+= ","+Integer.toString(z2);
 						z+= ","+Integer.toString(z3)+"}";
@@ -273,20 +273,24 @@ class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
 					sb.append(z); 
 					sb.append("           ".substring(z.length()));//the blank string is necessary to avoid StringIndexOutOfBounds
 					
-				} catch (Exception e) {
-					sb.append("ERROR IN COORD");
+				} catch {
+				  case e:Exception => 
+				      sb.append("ERROR IN COORD")
 				}
 			}
 			sb.append("\n");
+			x = x - 1
 		}
-		return sb.toString();*/
+		return sb.toString();
 		tensor.toString()
 	}
 
 	def toStringOfProper() :String = {
 		val sb = new StringBuffer();
 		sb.append("Incidence cube of size "+order+":\n");
-		for (x <- 0 to (order-1)) {
+		
+		var x = order-1
+		while (x >=0) {//the first upper line is the n-1 x coordinate
 			for (y <- 0 to (order-1)) {
 				try {
 					val elem = this.getValueAt(x, y);
@@ -296,10 +300,13 @@ class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
 				} catch {
 				  case e:Exception =>sb.append("--  ");
 				}
-			}
+			}//end row
 			sb.append("\n");
+			x = x - 1
 		}
-		sb.toString();
+		sb.toString()//+ "\n\n"+tensor.toString();
+		
+		
 	}
 
 	/**
@@ -367,7 +374,7 @@ class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
 
 object IncidenceCubeMain {
   def main(args:Array[String]) : Unit = {
-    var ic = new IncidenceCube(20)
+    var ic = new IncidenceCube(10)
     
     System.out.println(ic)
     ic.shuffle()

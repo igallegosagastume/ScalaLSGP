@@ -1,14 +1,15 @@
 package jacomatt.opengl
 
 import java.awt.event.KeyEvent.VK_DOWN;
-import java.awt.event.KeyEvent.VK_F;
-import java.awt.event.KeyEvent.VK_L;
 import java.awt.event.KeyEvent.VK_LEFT;
 import java.awt.event.KeyEvent.VK_PAGE_DOWN;
 import java.awt.event.KeyEvent.VK_PAGE_UP;
 import java.awt.event.KeyEvent.VK_RIGHT;
 import java.awt.event.KeyEvent.VK_SPACE;
 import java.awt.event.KeyEvent.VK_UP;
+import java.awt.event.KeyEvent.VK_PLUS
+import java.awt.event.KeyEvent.VK_MINUS
+import java.awt.event.KeyEvent._
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import javax.media.opengl.GL.GL_DEPTH_TEST;
@@ -38,37 +39,39 @@ import javax.media.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import jacomatt.model.IncidenceCube
 
-class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with KeyListener {
+class DrawIncidenceCube(protected var cube: IncidenceCube) extends GLEventListener with KeyListener {
   // inicializo el TextRenderer (solo una vez en toda la ejecucion, sino se cuelga!)
-  var textRenderer: TextRenderer = new TextRenderer(new Font("SansSerif", Font.PLAIN, 12));
-  var gl: GL2 = null
-  var glu: GLU = null
+  protected var textRenderer: TextRenderer = new TextRenderer(new Font("SansSerif", Font.PLAIN, 12));
+  protected var gl: GL2 = null
+  protected var glu: GLU = null
 
-  var quadric: GLUquadric = null
+  protected var quadric: GLUquadric = null
 
-  var rotateAngleX: Float = 0.0F // rotational angle for x-axis in
-  // degree
-  var rotateAngleY: Float = 0.0F // rotational angle for y-axis in
-  // degree
-  var z = -100.0F // z-location
-  var rotateSpeedX = 0.0F // rotational speed for x-axis
-  var rotateSpeedY = 0.0F // rotational speed for y-axis
+  protected var rotateAngleX: Float = -530.0F // rotational angle for x-axis in degree
+  protected var rotateAngleY: Float = 21.0F // rotational angle for y-axis in degree
+  protected var rotateAngleZ: Float = 269.0F // rotational angle for z-axis in degree
+  
+  protected var z = -100.0F // z-location
+  protected var zIncrement = 1.0F // for zoom in/out
 
-  var zIncrement = 0.5F // for zoom in/out
-  var rotateSpeedXIncrement = 0.5F // adjusting x rotational
-  // speed
-  var rotateSpeedYIncrement = 0.5F // adjusting y rotational
-  // speed
+  protected var rotateSpeedX = 0.0F // rotational speed for x-axis
+  protected var rotateSpeedY = 0.0F // rotational speed for y-axis
+  protected var rotateSpeedZ = 0.0F // rotational speed for z-axis
+  
+  protected var rotateSpeedIncrement = 0.5F // adjusting rotational speed
+  
   protected var n: Int = cube.order //dimension
 
-  var right: Float = 8.0F //value that is overwritten later
+  protected var right: Float = 8.0F //value that is overwritten later
 
-  var textScaleFactor = 1.0F
+  protected var textScaleFactor = 1.0F
 
-  var lightOn: Boolean = false
+  protected var lightOn: Boolean = false
 
-  val maxVal: Float = 100.0F
+  protected val maxVal: Float = 100.0F
 
+  protected var gradientOnAxis:Char = 'x'
+  
   // ------ Implement methods declared in GLEventListener ------
   /**
    * Called back immediately after the OpenGL context is initialized. Can be
@@ -170,9 +173,11 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     }
 
     gl.glTranslatef(0.0f, 0.0f, z); // translate into the screen
-    gl.glRotatef(rotateAngleX, 1.0f, 0.0f, 0.0f); // rotate about the x-axis
-    gl.glRotatef(rotateAngleY, 0.0f, 1.0f, 0.0f); // rotate about the y-axis
-
+    gl.glRotatef(rotateAngleX, 1.0f, 0.0f, 0.0f) // rotate about the x-axis
+    gl.glRotatef(rotateAngleY, 0.0f, 1.0f, 0.0f) // rotate about the y-axis
+    gl.glRotatef(rotateAngleZ, 0.0f, 0.0f, 1.0f)  // rotate about the z-axis
+    
+    
     this.drawSquareLimits(gl)
 
     //draws grid in blue
@@ -186,25 +191,38 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     //this.drawCube1By1(gl, 1.0F, 1.0F, 1.0F)
 
     //this loop draws the 1's in the incidence cube
-    for (x <- 0 to (n - 1))
-      for (y <- 0 to (n - 1)) {
-        var z = cube.plusOneZCoordOf(x, y)
-        if (z != (-1)) { //if the point exists (it must)
-          this.pointPlus1(gl, x, y, z);
+//    var x = 0
+//    var y = 0
+//    var zp = cube.getValueAt(x, y)
+//    this.drawPointPlus1(gl, x, y, zp)
+//    
+//    y = 1
+//    zp = cube.getValueAt(x, y)
+//    this.drawPointPlus1(gl, x, y, zp)
+//    
+//    y = 2 
+//    zp = cube.getValueAt(x, y)
+//    this.drawPointPlus1(gl, x, y, zp)
+    for (xp <- 0 to (n - 1)) {
+      for (yp <- 0 to (n - 1)) {
+        var zp = cube.plusOneZCoordOf(xp, yp)
+        if (zp != (-1)) { //if the point exists (it must)
+          this.drawPointPlus1ColorAsFunction(gl, xp, yp, zp);
         }
+        zp = cube.minusOneCoordOf(xp, yp);
+        if (zp != (-1)) {
+          //if cube is improper and this x,y contains a -1
+          
+          this.drawPointMinus1(gl, xp, yp, zp);
 
-        z = cube.minusOneCoordOf(x, y);
-        if (z != (-1)) {
-          this.pointMinus1(gl, x, y, z);
-
-          z = cube.secondPlusOneZCoordOf(x, y);
-          if (z != (-1))
-            this.pointPlus1(gl, x, y, z);
+          zp = cube.secondPlusOneZCoordOf(xp, yp);
+          if (zp != (-1))
+            this.drawPointPlus1ColorAsFunction(gl, xp, yp, zp);
 
         } //if there is a -1
 
-      } //for y
-
+      } //for yp
+    } //for xp
     //
 
     //		for (x <- 1 to 20) {
@@ -215,14 +233,27 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     //		}
 
     this.drawAxis(gl)
-    this.axisLetters(gl)
+    
+//    if (opts.isShowAxisLetters())
+//      this.drawAxisLetters(gl)
     // Update the rotational position after each refresh, based on
     // rotational speed.
-    rotateAngleX += rotateSpeedX;
-    rotateAngleY += rotateSpeedY;
+    rotateAngleX += rotateSpeedX
+    rotateAngleY += rotateSpeedY
+    rotateAngleZ += rotateSpeedZ
+    
+    if (rotateSpeedX!=0) {
+      System.out.println("X="+rotateAngleX)
+    }
+    if (rotateSpeedY!=0) {
+      System.out.println("Y="+rotateAngleY)
+    }
+    if (rotateSpeedZ!=0) {
+      System.out.println("Z="+rotateAngleZ)
+    }
   }
 
-  def drawSquareLimits(gl: GL2) {
+  protected def drawSquareLimits(gl: GL2) {
 
     gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
     gl.glBegin(GL_LINE_STRIP);
@@ -253,7 +284,7 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     gl.glEnd();
   }
 
-  def selectCube(gl: GL2, x: Float, y: Float, z: Float) {
+  protected def selectCube(gl: GL2, x: Float, y: Float, z: Float) {
     gl.glColor3f(1.0f, 0.0f, 1.0f); // red
 
     //z-line (4 lines to select cube)
@@ -342,7 +373,7 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     gl.glEnd();
   }
 
-  private def drawCube1By1Solid(gl: GL2, x: Float, y: Float, z: Float, red: Float, green: Float, blue: Float) {
+  protected def drawCube1By1Solid(gl: GL2, x: Float, y: Float, z: Float, red: Float, green: Float, blue: Float) {
 
     //cara de adelante
     gl.glBegin(GL2GL3.GL_QUADS); //apoyo el lapiz
@@ -353,6 +384,7 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     gl.glVertex3f(x + 0.0f, y + 1.0f, z + 1.0f);
     gl.glVertex3f(x + 0.0f, y + 0.0f, z + 1.0f);
 
+    
     //cara inferior
     gl.glVertex3f(x + 1.0f, y + 0.0f, z + 1.0f);
     gl.glVertex3f(x + 1.0f, y + 0.0f, z + 0.0f);
@@ -395,60 +427,134 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     gl.glVertex3f(x + 1.0f, y + 0.0f, z + 1.0f);
     gl.glVertex3f(x + 1.0f, y + 0.0f, z + 0.0f);
     gl.glEnd(); //levanto el lapiz
+    
+    
+//    gl.glTranslatef(0.5f, 0.5f, 0.0f); // translate into the screen
+//    gl.glRotatef(180.0f, 0.0f, 1.0f, 0.0f); // rotate 90 degrees y-axis
+//    gl.glRotatef(90.0f, 1.0f, 0.0f, 0.0f)  // rotate 90 on x-axis
+    
+    if (cube.getDrawingOptions().isShowAxisLetters()) {
+      var digit:String = String.valueOf(z.toInt)
+    
+      this.drawText(gl, digit, x, y, z, java.awt.Color.BLUE)
+    }
+//    gl.glRotatef(-180.0f, 0.0f, 1.0f, 0.0f); // rotate 90 degrees back
+    
+    
+//    gl.glTranslatef(-0.50f,-0.5f,0.0f); // translate into the screen
+//    gl.glRotatef(-90.0f, 0.0f, 1.0f, 0.0f); // rotate 90 degrees back
+    
+//    gl.glLoadIdentity(); // reset projection matrix
+//    gl.glRotatef(rotateAngleX, 1.0f, 0.0f, 0.0f) // rotate about the x-axis
+//    gl.glRotatef(rotateAngleY, 0.0f, 1.0f, 0.0f) // rotate about the y-axis
+//    gl.glRotatef(rotateAngleZ, 0.0f, 0.0f, 1.0f)  // rotate about the z-axis
+//    
   }
 
-  def pointMinus1(gl: GL2, x: Float, y: Float, z: Float) {
-    this.drawCube1By1Solid(gl, x, y, z, 1, 0, 0);
+  protected def drawPointMinus1(gl: GL2, x: Float, y: Float, z: Float) {
+    this.drawCube1By1Solid(gl, x, y, z, 1, 0, 0);//red cube
   }
 
-  def pointPlus1(gl: GL2, x: Float, y: Float, z: Float) {
+  protected def drawPointPlus1GradientColor(gl: GL2, x: Float, y: Float, z: Float) {
     //gradient colors as functions of coordinates
     val greenGrad: Float = (-y / n) + 1;
-    if (greenGrad < 0 || greenGrad > 1)
-      System.out.println("Bad grad: " + greenGrad);
     val blueGrad: Float = (-z / n) + 1;
     val redGrad: Float = (-x / n) + 1;
 
     this.drawCube1By1Solid(gl, x, y, z, redGrad, greenGrad, blueGrad);
-    this.drawCube1By1(gl, x, y, z);
+    this.drawTransparentCube1By1(gl, x, y, z);
   }
 
-  def axisLetters(gl: GL2) {
-    // labels sobre los ejes
-    // String letras = "abcdefghijklmnopqrstuvwxy01234567890";
+  protected def drawPointPlus1ColorAsFunctionOfY(gl: GL2, x: Float, y: Float, z: Float) {
+    //gradient colors as functions of coordinates
+    val greenGrad: Float = (-y / n) + 1;
+    val blueGrad: Float = 0.5F
+    val redGrad: Float = 0.2F
 
-    // label del eje x
+    this.drawCube1By1Solid(gl, x, y, z, redGrad, greenGrad, blueGrad);
+    this.drawTransparentCube1By1(gl, x, y, z);
+  }
+
+  protected def drawPointPlus1ColorAsFunctionOfX(gl: GL2, x: Float, y: Float, z: Float) {
+    //gradient colors as functions of coordinates
+    val greenGrad: Float = (-x / n) + 1
+    val blueGrad: Float = 0.5F
+    val redGrad: Float = 0.2F
+
+    this.drawCube1By1Solid(gl, x, y, z, redGrad, greenGrad, blueGrad);
+    this.drawTransparentCube1By1(gl, x, y, z);
+  }
+
+  protected def drawPointPlus1ColorAsFunctionOfZ(gl: GL2, x: Float, y: Float, z: Float) {
+    //gradient colors as functions of coordinates
+    val greenGrad: Float = 0.2F
+    val blueGrad: Float = 0.5F
+    val redGrad: Float = (-z / n) + 1
+
+    this.drawCube1By1Solid(gl, x, y, z, redGrad, greenGrad, blueGrad);
+    this.drawTransparentCube1By1(gl, x, y, z);
+  }
+  
+  protected def drawPointPlus1ColorAsFunction(gl: GL2, x:Float, y:Float, z:Float) {
+    this.gradientOnAxis match {
+      case 'x' => drawPointPlus1ColorAsFunctionOfX(gl,x,y,z)
+      case 'y' => drawPointPlus1ColorAsFunctionOfY(gl,x,y,z)
+      case 'z' => drawPointPlus1ColorAsFunctionOfZ(gl,x,y,z)
+      case other => drawPointPlus1GradientColor(gl, x, y, z)
+    }
+  }
+  protected def drawAxisLetters(gl: GL2) {
+    // x-axis coordinates
     var digit: String = ""
     var x: Int = 0
+    var car:Int = 0
 
     for (x <- 0 to (n - 1)) {
-      var car: Int = x % 10;
+      car = x % 10;
       digit = Integer.toString(car);
 
-      this.drawText(gl, digit, x, n, n);
-      // System.out.print(Character.toString((char)indice));
+      this.drawText(gl, digit, x, n, n, java.awt.Color.RED)
     }
-    // label del eje y
-    gl.glRotatef(90.0f, 0.0f, 0.0f, 1.0f); // rotacion sobre el eje z
-    for (x <- 0 to (n - 1)) {
-      var car: Int = x % 10;
-      digit = Integer.toString(car);
-
-      this.drawText(gl, digit, x, 0.0f, n);
+    
+    // y-axis coordinates
+    gl.glRotatef(90.0f, 0.0f, 0.0f, 1.0f); // z-axis rotation
+    for (y <- 0 to (n - 1)) {
+      car = y % 10
+      digit = Integer.toString(car)
+      
+      this.drawText(gl, digit, y, 0.0f, n, java.awt.Color.GREEN)
     }
-    gl.glRotatef(-90.0f, 0.0f, 0.0f, 1.0f); // vuelvo el eje z como estaba
-    gl.glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // roto 90 el eje y
-    // label del eje z
-    var caracter: Int = 96;
-    for (x <- -n to -1) {
-      caracter = (caracter + 1); // cambio el caracter actual modulo n
-      drawText(gl, caracter.toChar + "", x, n, 0.0F);
+    
+//    for (x <- 0 to (n - 1)) {
+//      var car: Int = x % 10;
+//      digit = Integer.toString(car);
+//
+//      this.drawText(gl, digit, x, 0.0f, n);
+//    }
+    gl.glRotatef(-90.0f, 0.0f, 0.0f, 1.0f); // rotate back
+    gl.glRotatef(90.0f, 0.0f, 1.0f, 0.0f); // rotate 90 degrees y-axis
+    
+    // z-axis coordinates
+    for (z <- 0 to (n - 1)) {
+      var mz = z * (-1)
+      car = z % 10
+      digit = Integer.toString(car)
+      this.drawText(gl, digit, mz-1, n, 0.0f, java.awt.Color.BLUE)
     }
+//    for (x <- 0 to (n - 1)) {
+//      var mx = x * (-1)
+//      var car: Int = x % 10;
+//      digit = Integer.toString(car);
+//
+//      this.drawText(gl, digit, mx-1, n, 0.0F);
+//    }
+//    
     gl.glRotatef(-90.0f, 0.0f, 1.0f, 0.0f); // vuelvo el eje y como estaba
 
   }
 
-  def drawText(gl: GL2, text: String, x: Float, y: Float, z: Float) {
+  protected def drawText(gl: GL2, text: String, x: Float, y: Float, z: Float, color:java.awt.Color) {
+    textRenderer.setColor(color)
     textRenderer.begin3DRendering();
     gl.glEnable(GL.GL_DEPTH_TEST);
     gl.glDisable(GL.GL_CULL_FACE);
@@ -456,7 +562,7 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
     textRenderer.end3DRendering();
   }
 
-  def drawCube1By1(gl: GL2, x: Float, y: Float, z: Float) {
+  protected def drawTransparentCube1By1(gl: GL2, x: Float, y: Float, z: Float) {
     // lineas que unen los dos cuadrados en azul
     gl.glBegin(GL_LINE_STRIP);
     gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
@@ -503,19 +609,26 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
   }
 
   protected def drawAxis(gl: GL2) {
-    //axis in blue
+    
+    //criteria to remember: X,Y,Z = R,G,B
+    
+    //x-axis in red
     gl.glBegin(GL_LINE_STRIP);
-    gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
+    gl.glColor3f(1.0f, 0.0f, 0.0f); // red
     gl.glVertex3f(0.0f, 0.0f, 0.0f);
     gl.glVertex3f(maxVal, 0.0f, 0.0f);
     gl.glEnd();
 
+    //y-axis in green
     gl.glBegin(GL_LINE_STRIP);
+    gl.glColor3f(0.0f, 1.0f, 0.0f); // green
     gl.glVertex3f(0.0f, 0.0f, 0.0f);
     gl.glVertex3f(0.0f, maxVal, 0.0f);
     gl.glEnd();
 
+    //z-axis in blue
     gl.glBegin(GL_LINE_STRIP);
+    gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
     gl.glVertex3f(0.0f, 0.0f, 0.0f);
     gl.glVertex3f(0.0f, 0.0f, maxVal);
     gl.glEnd();
@@ -537,34 +650,48 @@ class DrawIncidenceCube(var cube: IncidenceCube) extends GLEventListener with Ke
         
         if (cube.proper)
           System.out.println("PROPER!")
-        
+      case VK_PAGE_UP => // increase rotational speed in z
+        rotateSpeedZ += rotateSpeedIncrement
+      case VK_PAGE_DOWN => //decrease rotational speed in z
+        rotateSpeedZ -= rotateSpeedIncrement
+      case VK_UP => // decrease rotational speed in x
+        rotateSpeedX -= rotateSpeedIncrement;
+      case VK_DOWN => // increase rotational speed in x
+        rotateSpeedX += rotateSpeedIncrement;
+      case VK_LEFT => // decrease rotational speed in y
+        rotateSpeedY -= rotateSpeedIncrement;
+      case VK_RIGHT => // increase rotational speed in y
+        rotateSpeedY += rotateSpeedIncrement;
+      case VK_MINUS => // zoom-out
+        z -= zIncrement;
+      case VK_PLUS => // zoom-in
+        z += zIncrement;
+      case VK_P => //letter P: print the Latin Square
+        System.out.println(cube)
+      case VK_A => //letter A: toggle axis letters
+        cube.getDrawingOptions().setShowAxisLetters(!cube.getDrawingOptions().isShowAxisLetters())
       case VK_L => // toggle light on/off
         lightOn = !lightOn;
       case VK_F => // switch to the next filter (NEAREST, LINEAR, MIPMAP)
       // currTextureFilter = (currTextureFilter + 1) % textures.length;
-      case VK_PAGE_UP => // zoom-out
-        z -= zIncrement;
-      case VK_PAGE_DOWN => // zoom-in
-        z += zIncrement;
-      case VK_UP => // decrease rotational speed in x
-        rotateSpeedX -= rotateSpeedXIncrement;
-      case VK_DOWN => // increase rotational speed in x
-        rotateSpeedX += rotateSpeedXIncrement;
-      case VK_LEFT => // decrease rotational speed in y
-        rotateSpeedY -= rotateSpeedYIncrement;
-      case VK_RIGHT => // increase rotational speed in y
-        rotateSpeedY += rotateSpeedYIncrement;
-      case 65 => //letter A: toggle show axis letters
-        System.out.println(cube)
-      case 66 => //letter B: Does something
-        System.out.println("66");
-      case x =>
+      case VK_X => //change color
+        this.gradientOnAxis = 'x'
+      case VK_Y => 
+        this.gradientOnAxis = 'y'
+      case VK_Z =>
+        this.gradientOnAxis = 'z'
+      case VK_G =>
+        this.gradientOnAxis = 'g'
+      case other =>
       //does nothing
 
     }
   }
 
   override def keyReleased(e: KeyEvent) {
+    rotateSpeedX = 0
+    rotateSpeedY = 0
+    rotateSpeedZ = 0
   }
 
   override def keyTyped(e: KeyEvent) {

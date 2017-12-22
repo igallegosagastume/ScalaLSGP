@@ -78,7 +78,8 @@ class Tensor[T](val size: Int, var nullElem: T) {
   override def toString(): String = {
     var sb = new StringBuffer
     //begin row
-    for (i <- 0 to (size - 1)) {
+    var i = size-1
+    while (i >=0) {
       //begin column
       for (j <- 0 to (size - 1)) {
         sb.append("{")
@@ -89,6 +90,7 @@ class Tensor[T](val size: Int, var nullElem: T) {
         sb.append("} ")
       }
       sb.append("\n")
+      i = i - 1
     }
 
     sb.toString();

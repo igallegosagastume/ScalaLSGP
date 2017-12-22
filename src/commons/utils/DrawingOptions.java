@@ -11,7 +11,7 @@ public class DrawingOptions {
 	private int FPS = 40; // animator's target frames per second
 	
 	//window
-	private String windowTitle = "Scala3D"; // window's
+	private String windowTitle = "ScalaLSGP"; // window's
 	private int frameWidth = 1000;
 	private int frameHeight = 1000;
 	private int frameXPosition = 150;
@@ -19,7 +19,7 @@ public class DrawingOptions {
 	
 	//booleans
 	private boolean fullScreen = false;
-	private boolean showAxisLetters = true;
+	private boolean showAxisLetters = false;
 	private boolean showAxis = true;
 	private boolean showGrid = false;
 	private boolean showBoxes = true;
