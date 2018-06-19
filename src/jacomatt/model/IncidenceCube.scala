@@ -370,14 +370,5 @@ class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
   def getDrawingOptions():DrawingOptions = {
      this.opts
   }
-}
 
-object IncidenceCubeMain {
-  def main(args:Array[String]) : Unit = {
-    var ic = new IncidenceCube(10)
-    
-    System.out.println(ic)
-    ic.shuffle()
-    ic.drawIncidenceCube()
-  }
 }
