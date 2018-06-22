@@ -1,6 +1,6 @@
 package commons.model.immutable
 
-abstract class ImmutableAbstractLS[T] protected (private val elements: Vector[Vector[T]], protected val nullElem: T) {
+abstract class AbstractLS[T] protected (private val elements: Vector[Vector[T]], protected val nullElem: T) {
 
   val order: Int = elements.size
   /**
