@@ -2,7 +2,8 @@ package commons.model
 
 import scala.collection.mutable.ArraySeq
 
-class Tensor[T](val size: Int, var nullElem: T) {
+
+class Tensor[T](val size: Int, var nullElem: T) {// error: traits or objects may not have parameters (type parameters are OK)
 
   private var elements: ArraySeq[ArraySeq[ArraySeq[T]]] = new ArraySeq(size)
 

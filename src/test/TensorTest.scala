@@ -5,7 +5,10 @@ import org.scalatest._
 import java.lang.IndexOutOfBoundsException
 import org.scalatest.Args
 import scala.collection.Set
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class TensorTest extends FlatSpec with Matchers {
 
   "A Tensor" should "be able to store an retrieve a value" in {
@@ -48,13 +51,5 @@ class TensorTest extends FlatSpec with Matchers {
     val tensor2 = new Tensor[Double](size=5, nullElem=0.0)
     tensor2.setElemAt(5.4, 0, 0, 3)
     System.out.println(tensor2)
-  }
-}
-
-object TensorTest {
-  def main(args: Array[String]): Unit = {
-    val test = new TensorTest
-
-    //find the way to run "test" from here to use eclipse coverage option
   }
 }
