@@ -1,7 +1,8 @@
 package commons.model.immutable
 
-class VectorLS[T] private (private val elements: Vector[Vector[T]], override val nullElem: T) extends ImmutableAbstractLS[T](elements, nullElem) {
+class VectorLS[T] private (override val elements: Vector[Vector[T]]) extends AbstractLS[T](elements) {
 
+  //val vec = Vector.fill(order, order)(nullElem)
   //Vector.tabulate(3,3){ (i,j) => 3*i+j+1 }
 
   /**
@@ -16,37 +17,18 @@ class VectorLS[T] private (private val elements: Vector[Vector[T]], override val
 
     val newElements: Vector[Vector[T]] = this.elements.updated(row, newRow)
 
-    new VectorLS(newElements, this.nullElem)
+    new VectorLS(newElements)
   }
 
-  //  override def toString: String = {
-  //    val sb = new StringBuffer();
-  //    sb.append("Latin Square of order " + order + ":\n");
-  //
-  //    //var x = order - 1
-  //    for (x <- 0 to (order - 1)) {
-  //      for (y <- 0 to (order - 1)) {
-  //        try {
-  //          val elem = this.getValueAt(x, y);
-  //          sb.append(elem);
-  //          sb.append("    ".substring(elem.toString().length()));
-  //
-  //        } catch {
-  //          case e: Exception => sb.append("--  ");
-  //        }
-  //      } //end row
-  //      sb.append("\n");
-  //    }
-  //    sb.toString()
-  //  }
 }
 
 object VectorLS {
 
-  def apply[T](order: Int, nullElem: T) = {
-    val vec = Vector.fill(order, order)(nullElem)
-
-    new VectorLS[T](vec, nullElem)
+  /**
+   * It creates a cyclic LS by default
+   */
+  def apply(order: Int) = {
+    VectorLS.getCyclicLS(Range(0, order))
   }
 
   /**
@@ -56,31 +38,19 @@ object VectorLS {
 
     var elem = range.min
     var order = range.size
-    var ls = VectorLS(order, 0)
+    var vector = Vector.tabulate(order, order){ (i,j) => ((i+j) % order) }
 
-    for (row <- 0 to (order - 1)) {
-      elem = row + range.min
-      for (column <- 0 to (order - 1)) {
-        ls = ls.setValueAt(row, column, elem)
-        elem = elem + 1
-
-        if (elem == (range.max + 1)) {
-          elem = range.min
-        }
-
-      }
-    }
-    ls
+    new VectorLS(vector)
   }
 
   def main(args: Array[String]) {
-    //    val ls = VectorLS(3, 0)
-    //
-    //    println(ls)
-    //
-    //    val ls2 = ls.setValueAt(0, 1, 2)
-    //
-    //    println(ls2)
+    val ls = VectorLS(3)
+
+    println(ls)
+
+    val ls2 = ls.setValueAt(0, 1, 2)
+
+    println(ls2)
 
     val ls3 = VectorLS.getCyclicLS(Range(2, 7))
 
