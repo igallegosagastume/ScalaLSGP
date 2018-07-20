@@ -1,8 +1,8 @@
 package jacomatt.model
 
-import commons.model.AbstractLatinSquare
-import commons.model.Tensor
-import commons.model.OrderedTriple
+import commons.model.mutable.AbstractLatinSquare
+import commons.model.mutable.Tensor
+import commons.model.immutable.OrderedTriple
 import commons.utils.RandomUtils
 import javax.swing.JFrame
 import commons.utils.DrawingOptions

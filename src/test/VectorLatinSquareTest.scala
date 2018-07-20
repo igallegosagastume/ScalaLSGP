@@ -13,7 +13,7 @@ class VectorLSTest extends FlatSpec with Matchers {
 
   "A vector LS" should "print itself in the console" in {
 
-    val ls = VectorLS(5)
+    val ls = VectorLS(6)
     
     println(ls)
   }
