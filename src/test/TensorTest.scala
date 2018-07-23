@@ -1,6 +1,6 @@
 package test
 
-import commons.model.Tensor
+import commons.model.mutable.Tensor
 import org.scalatest._
 import java.lang.IndexOutOfBoundsException
 import org.scalatest.Args

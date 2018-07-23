@@ -1,4 +1,4 @@
-package commons.model
+package commons.model.mutable
 
 import scala.collection.mutable.ArraySeq
 

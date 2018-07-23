@@ -1,8 +1,13 @@
 package commons.model.immutable
 
-abstract class AbstractLS[T] protected (protected val elements: Vector[Vector[T]]) {
+import commons.utils.RandomUtils
+
+abstract class AbstractLatinSquare[T] protected (protected val elements: Vector[Vector[T]]) {
 
   val order: Int = elements.size
+  val allNumsVector : Vector[Int] = Vector.tabulate(order){ i => i }
+  val allNumsSet : Set[Int] = (0 to order).toSet
+  
   /**
    * Get an element in the square
    */
@@ -11,8 +16,30 @@ abstract class AbstractLS[T] protected (protected val elements: Vector[Vector[T]
   /**
    * return a new LS with a modified element (left the impl for concrete subclasses)
    */
-  def setValueAt(row: Int, column: Int, value: T): AbstractLS[T]
+  def setValueAt(row: Int, column: Int, value: T): AbstractLatinSquare[T]
 
+  
+  def getRow(x:Int) : Vector[T] = {//TODO create type Row
+    this.elements(x)
+  }
+  
+  def getCol(y:Int) : Vector[T] = {
+    this.elements.map(row => row(y))
+  }
+  
+  def setRow(i:Int, row:Vector[T]) : AbstractLatinSquare[T]
+  
+  def availInRow(x:Int) = {
+    val row = this.getRow(x)
+    
+    allNumsVector.diff(row)
+  }
+  
+  def availInCol(y:Int) = {
+    val col = this.getCol(y)
+    
+    allNumsVector.diff(col)
+  }
   /**
    * A LS must know how to write to file.
    *
@@ -36,9 +63,12 @@ abstract class AbstractLS[T] protected (protected val elements: Vector[Vector[T]
         try {
           val elem = this.getValueAt(x, y)
 
-          sb.append(elem)
-          sb.append("    ".substring(elem.toString().length()))
-
+          if (elem.equals(RandomUtils.getNullElem())) 
+            sb.append("--  ")
+          else {
+            sb.append(elem)
+            sb.append("    ".substring(elem.toString().length()))
+          }
         } catch {
           case e: Exception => sb.append("--  ")
         }
@@ -53,7 +83,7 @@ abstract class AbstractLS[T] protected (protected val elements: Vector[Vector[T]
    * A LS implementation must know how to compare with other LSs.
    *
    */
-  def equals(ls2: AbstractLS[T]): Boolean = {
+  def equals(ls2: AbstractLatinSquare[T]): Boolean = {
 
     if (order != ls2.order)
       false
@@ -69,6 +99,6 @@ abstract class AbstractLS[T] protected (protected val elements: Vector[Vector[T]
   }
 }
 
-object AbstractLS {
+object AbstractLatinSquare {
 
 }
