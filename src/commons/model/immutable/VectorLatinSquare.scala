@@ -1,6 +1,8 @@
 package commons.model.immutable
 
-class VectorLS[T] private (override val elements: Vector[Vector[T]]) extends AbstractLS[T](elements) {
+import commons.utils.RandomUtils
+
+class VectorLatinSquare[T] private (override val elements: Vector[Vector[T]]) extends AbstractLatinSquare[T](elements) {
 
   //val vec = Vector.fill(order, order)(nullElem)
   //Vector.tabulate(3,3){ (i,j) => 3*i+j+1 }
@@ -8,43 +10,62 @@ class VectorLS[T] private (override val elements: Vector[Vector[T]]) extends Abs
   /**
    * Gets the value at specified row and column indexes.
    */
-  def getValueAt(row: Int, column: Int): T = {
-    elements(row)(column)
+  def getValueAt(i: Int, j: Int): T = {
+    elements(i)(j)
   }
 
-  def setValueAt(row: Int, column: Int, elem: T): VectorLS[T] = {
-    val newRow: Vector[T] = this.elements(row).updated(column, elem)
+  def setValueAt(i: Int, j: Int, elem: T): VectorLatinSquare[T] = {
+    val newRow: Vector[T] = this.elements(i).updated(j, elem)
 
-    val newElements: Vector[Vector[T]] = this.elements.updated(row, newRow)
+    val newElements: Vector[Vector[T]] = this.elements.updated(i, newRow)
 
-    new VectorLS(newElements)
+    new VectorLatinSquare(newElements)
   }
 
+  def setRow(i: Int, row: Vector[T]): AbstractLatinSquare[T] = {
+    val newElements: Vector[Vector[T]] = this.elements.updated(i, row)
+
+    /* val newElements : Vector[Vector[T]] = for (
+       (elem, index) <- this.elements.zipWithIndex;
+       r = if (i==index)
+             row
+           else
+             elem
+       ) yield r*/
+
+    new VectorLatinSquare(newElements)
+  }
 }
 
-object VectorLS {
+object VectorLatinSquare {
 
   /**
    * It creates a cyclic LS by default
    */
   def apply(order: Int) = {
-    VectorLS.getCyclicLS(Range(0, order))
+    VectorLatinSquare.getCyclicLS(order)
   }
 
   /**
-   * Creates a VectorLS[Int] given a range of Int
+   * Creates a VectorLatinSquare[Int] without the Latin property (temporarily)
    */
-  def getCyclicLS(range: Range): VectorLS[Int] = {
+  def getFillableLS(order: Int) = {
+    val vector = Vector.tabulate(order, order) { (i, j) => RandomUtils.getNullElem() }
+    new VectorLatinSquare(vector)
+  }
 
-    var elem = range.min
-    var order = range.size
-    var vector = Vector.tabulate(order, order){ (i,j) => ((i+j) % order) }
+  /**
+   * Creates a VectorLatinSquare[Int] given the order of the LS
+   */
+  def getCyclicLS(order: Int): VectorLatinSquare[Int] = {
 
-    new VectorLS(vector)
+    var vector = Vector.tabulate(order, order) { (i, j) => ((i + j) % order) }
+
+    new VectorLatinSquare(vector)
   }
 
   def main(args: Array[String]) {
-    val ls = VectorLS(3)
+    val ls = VectorLatinSquare(3)
 
     println(ls)
 
@@ -52,7 +73,7 @@ object VectorLS {
 
     println(ls2)
 
-    val ls3 = VectorLS.getCyclicLS(Range(2, 7))
+    val ls3 = VectorLatinSquare.getCyclicLS(5)
 
     println(ls3)
 
