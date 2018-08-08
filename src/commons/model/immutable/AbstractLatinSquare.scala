@@ -35,7 +35,7 @@ abstract class AbstractLatinSquare[T] protected (protected val elements: Vector[
     allNumsVector.diff(row)
   }
   
-  def availInCol(y:Int) : Vector[Int] = {
+  def availInCol(y:Int) = {
     val col = this.getCol(y)
     
     allNumsVector.diff(col)
