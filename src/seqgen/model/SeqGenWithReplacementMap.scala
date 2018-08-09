@@ -26,33 +26,32 @@ class SeqGenWithReplacementMap(order:Int) {
       if (!partialRow.contains(elem)) {
         this.generateRowWithPartialRow(i, j + 1, partialLS, partialRow :+ elem)
       } else {
-        val newPartialRow = this.makeSpaceForElem(elem, i, j, partialLS, partialRow)
-        //val elem2 = this.generateElem(i, j, partialLS, newPartialRow)
-        //now elem2 fits in position (i,j)
+//        val newPartialRow = this.makeSpaceForElem(elem, i, j, partialLS, partialRow)
+        //now elem fits in position (i,j)
         this.generateRowWithPartialRow(i, j + 1, partialLS, partialRow :+ elem)
       }
     }
   }
   
-  
-  private def makeSpaceForElem(elem:Int, i:Int, j:Int, partialLS:AbstractLatinSquare[Int], partialRow:Vector[Int]) : Vector[Int] = {
-    
-    /*val replacementMap = this.generateReplacementMap(partialLS)
-    
-    for (i <- replacementMap) {
-      println(i)
-    }*/
-    
+  private def makeSpaceForElem(elem:Int, inPos:Int, partialLS:AbstractLatinSquare[Int], partialRow:Vector[Int]) : Vector[Int] = {
     val pos = partialRow.indexOf(elem)
     
-    if (pos == -1) {
+    if ((pos == -1) && (partialRow.distinct.size==partialRow.size) ) {//elem is not in partialRow && partialRow has not repetitions
       partialRow
     } else {
       val possibleInColumnPos = partialLS.availInCol(pos)
       val actualElem = Vector(partialRow(pos))
       val newElem = RandomUtils.randomChoice(possibleInColumnPos.diff(actualElem))
-      makeSpaceForElem(newElem, i, j, partialLS, partialRow.updated(pos, newElem))
+      val newRow = partialRow.updated(pos, newElem)
+      makeSpaceForElem(elem, inPos, partialLS, newRow, partialRow(pos), Vector())
     }
+  }
+  
+  private def makeSpaceForElem(elem:Int, inPos:Int, partialLS:AbstractLatinSquare[Int], partialRow:Vector[Int], lastIndex:Int, path:Vector[Int]) :Vector[Int] = {
+    
+    
+    
+    path
   }
   
   private def generateElem(i: Int, j: Int, partialLS: AbstractLatinSquare[Int], partialRow: Vector[Int]): Int = {
@@ -61,7 +60,7 @@ class SeqGenWithReplacementMap(order:Int) {
     val availInPos = availInRow.intersect(availInCol)
 
     if (availInPos.isEmpty) {
-      RandomUtils.randomChoice(availInCol)
+      RandomUtils.randomChoice(availInCol) //there is a collision here, allow a repetition in row 
     } else {
       RandomUtils.randomChoice(availInPos)
     }
