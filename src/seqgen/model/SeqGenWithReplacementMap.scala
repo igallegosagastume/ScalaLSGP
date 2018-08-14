@@ -26,54 +26,90 @@ class SeqGenWithReplacementMap(order:Int) {
       if (!partialRow.contains(elem)) {
         this.generateRowWithPartialRow(i, j + 1, partialLS, partialRow :+ elem)
       } else {
-        val newPartialRow = this.eliminateRepetitionForElem(elem, partialLS, partialRow, Vector())
+        val emptyPath = Vector()
+        val partialRowWithElem = partialRow :+ elem
+        val availInRow = partialLS.allNumsVector.diff(partialRowWithElem)
+//        val newPartialRow = this.eliminateRepetitionForElem(elem, j, partialLS, partialRowWithElem, availInRow, emptyPath)
+//        val availInRow = partialLS.allNumsVector.diff(partialRow)
+        val newPartialRow = this.makeRoomForElem(elem, elem, partialRow.indexOf(elem), partialLS, partialRow, availInRow, emptyPath)
         //now elem fits in position (i,j)
         this.generateRowWithPartialRow(i, j + 1, partialLS, newPartialRow)
       }
     }
   }
-  
-  private def makeSpaceForElem(elem:Int, inPos:Int, partialLS:AbstractLatinSquare[Int], partialRow:Vector[Int]) : Vector[Int] = {
-    val pos = partialRow.indexOf(elem)
-    
-    if ((pos == -1) && (partialRow.distinct.size==partialRow.size) ) {//elem is not in partialRow && partialRow has not repetitions
-      return partialRow
-    }
-    //
-    val possibleInColumnPos = partialLS.availInCol(pos)
-    val actualElem = Vector(partialRow(pos))
-    val newElem = RandomUtils.randomChoice(possibleInColumnPos.diff(actualElem))
-    val newRow = partialRow.updated(pos, newElem)
-//    this.chainOfReplacements(elem, inPos, partialLS, newRow, pos, Vector())
-    newRow
-  }
-  
-  private def eliminateRepetitionForElem(lastElem:Int, partialLS:AbstractLatinSquare[Int], partialRow:Vector[Int], path:Vector[Int]) : Vector[Int] = {
-    
-    val newPos = partialRow.indexOf(lastElem)
-    
-    if (partialRow.distinct.size == partialRow.size) {
-      return partialRow
-    }
-    
-    val newPath :Vector[Int] = path :+ lastElem
 
-    val availInCol = partialLS.availInCol(newPos)
+  private def makeRoomForElem(elem: Int, old: Int, idxOld: Int,
+                              partialLS: AbstractLatinSquare[Int],
+                              currentRow: Vector[Int],
+                              availInRow: Vector[Int],
+                              path: Vector[Int]): Vector[Int] = {
     
-//    val availInRow = partialLS.allNumsVector.diff(partialRow)
-    
-    val available = (availInCol).diff(newPath) //must be in available but not in path
-    
+    //calculate available to choose
+    val availInCol = partialLS.availInCol(idxOld)
+    val available = (availInCol).diff(path).diff(Vector(elem)) //must be in available in col but not in path, and must not use elem
+
     if (available.isEmpty) {
-      throw new Exception("Bad path")
+      //Path no good, begin again
+      //				path = new HashSet<Integer>();
+      //				avail.addAll(map.get(idx_old));//cannot avoid addAll
+//      val emptyPath = Vector()
+//      return this.makeRoomForElem(elem, old, idxOld, partialLS, availInRow, path)
+      throw new Exception("No good path... failure")
     }
-    //take a new element for the position
-    val newElem = RandomUtils.randomChoice(available) 
+    //choose
+    val newElem = RandomUtils.randomChoice(available);
+    val idxNew = currentRow.indexOf(newElem); //index of this elem before replacement because it will be repeated
+
     //make the replacement:
-    val newRow = partialRow.updated(newPos, newElem)
-        
-    eliminateRepetitionForElem(newElem, partialLS, newRow, newPath)
+    val newRow = currentRow.updated(idxOld, newElem) //replace
+
+    //store in path
+    val newPath: Vector[Int] = path :+ newElem
+
+    //remove from available in row
+    val newAvailInRow = availInRow.diff(Vector(newElem))
+
+    //			availableInCol[idx_old].add(old);
+    //			availableInCol[idx_old].remove(newElem);
+
+    val finished = (availInRow.contains(elem) && idxNew == -1) //the element is now available in currentRow and there are no repetitions
+
+    //			idx_old = idx_new;
+    //			old = newElem;
+    if (finished) {
+      return currentRow
+    } else {
+      return this.makeRoomForElem(elem, newElem, idxNew, partialLS, newRow, newAvailInRow, newPath)
+    }
   }
+  
+//  private def eliminateRepetitionForElem(newIndex:Int, lastIndex:Int, partialLS:AbstractLatinSquare[Int], partialRow:Vector[Int], path:Vector[Int]) : Vector[Int] = {
+//    
+//    val newPos = partialRow.indexOf(lastElem)
+//    
+//    if ((newPos == lastIndex) && 
+//        () ) {
+//      return partialRow
+//    }
+//    
+//    val newPath :Vector[Int] = path :+ lastElem
+//
+//    val availInCol = partialLS.availInCol(newPos)
+//    
+////    val availInRow = partialLS.allNumsVector.diff(partialRow)
+//    
+//    val available = (availInCol).diff(newPath) //must be in available but not in path
+//    
+//    if (available.isEmpty) {
+//      throw new Exception("Bad path")
+//    }
+//    //take a new element for the position
+//    val newElem = RandomUtils.randomChoice(available) 
+//    //make the replacement:
+//    val newRow = partialRow.updated(newPos, newElem)
+//        
+//    eliminateRepetitionForElem(newElem, partialLS, newRow, newPath)
+//  }
   
   private def generateElem(i: Int, j: Int, partialLS: AbstractLatinSquare[Int], partialRow: Vector[Int]): Int = {
     val availInRow = partialLS.allNumsVector.diff(partialRow)
