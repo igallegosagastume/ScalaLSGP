@@ -1,12 +1,13 @@
 package commons.model.immutable
 
 import commons.utils.RandomUtils
+import scala.collection.mutable.Set
 
 abstract class AbstractLatinSquare[T] protected (protected val elements: Vector[Vector[T]]) {
 
   val order: Int = elements.size
   val allNumsVector : Vector[Int] = Vector.tabulate(order){ i => i }
-  val allNumsSet : Set[Int] = (0 to order).toSet
+//  val allNumsSet : Set[Int] = (0 to order).toSet
   
   /**
    * Get an element in the square
@@ -88,8 +89,8 @@ abstract class AbstractLatinSquare[T] protected (protected val elements: Vector[
     if (order != ls2.order)
       false
 
-    for (i <- 0 to order) {
-      for (j <- 0 to order) {
+    for (i <- 0 to (order - 1)) {
+      for (j <- 0 to (order - 1)) {
         if (this.getValueAt(i, j) != ls2.getValueAt(i, j)) {
           return false;
         }
@@ -97,7 +98,23 @@ abstract class AbstractLatinSquare[T] protected (protected val elements: Vector[
     }
     return true;
   }
-}
+  
+  def preservesLatinProperty() : Boolean = {
+		var symbols : Set[T] = Set[T]();
+		
+		//row verification (its enough)
+		for (i <- 0 to (order - 1)) {
+		  symbols = Set[T]();
+			for (j <- 0 to (order - 1)) {
+				symbols += this.getValueAt(i, j);	
+			}
+			if (symbols.size != order)
+				return false;
+		}
+		return true;
+  }
+  
+}//end class
 
 object AbstractLatinSquare {
 

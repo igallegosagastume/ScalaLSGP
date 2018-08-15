@@ -22,7 +22,7 @@ class VectorLatinSquare[T] private (override val elements: Vector[Vector[T]]) ex
     new VectorLatinSquare(newElements)
   }
 
-  def setRow(i: Int, row: Vector[T]): AbstractLatinSquare[T] = {
+  def setRow(i: Int, row: Vector[T]): VectorLatinSquare[T] = {
     val newElements: Vector[Vector[T]] = this.elements.updated(i, row)
 
     /* val newElements : Vector[Vector[T]] = for (
