@@ -5,7 +5,7 @@ import commons.model.immutable.VectorLatinSquare
 import commons.utils.RandomUtils
 import commons.utils.ControlStructures
 
-class SeqGenWithReplacementMap(order:Int) {
+class SeqGenWithReplacementMap(val order:Int) {
   
   val allNulls : AbstractLatinSquare[Int] = VectorLatinSquare.getFillableLS(order)
   
@@ -70,12 +70,6 @@ class SeqGenWithReplacementMap(order:Int) {
 
     if (available.isEmpty) {
 //      Path no good, begin again
-//      
-//      val emptyPath = Vector()
-//      avail.addAll(map.get(idx_old));//cannot avoid addAll
-      println("No good path for partial row:")
-      println(currentRow)
-      println(partialLS)
       throw new Exception("No good path... failure")
     }
     //choose a new element for inxOld position
