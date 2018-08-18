@@ -1,4 +1,4 @@
-package commons.model.mutable
+package commons.mutable.model
 
 /**
  * This is the abstract class that represent all implementation of a Latin Square.

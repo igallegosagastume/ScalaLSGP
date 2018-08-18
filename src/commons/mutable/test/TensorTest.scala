@@ -1,12 +1,10 @@
-package test
+package commons.mutable.test
 
-import commons.model.mutable.Tensor
+import commons.mutable.model.Tensor
 import org.scalatest._
-import java.lang.IndexOutOfBoundsException
-import org.scalatest.Args
-import scala.collection.Set
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import org.scalactic.source.Position.apply
 
 @RunWith(classOf[JUnitRunner])
 class TensorTest extends FlatSpec with Matchers {

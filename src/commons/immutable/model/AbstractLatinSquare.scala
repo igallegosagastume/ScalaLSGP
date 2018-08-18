@@ -1,4 +1,4 @@
-package commons.model.immutable
+package commons.immutable.model
 
 import commons.utils.RandomUtils
 import scala.collection.mutable.Set
@@ -102,10 +102,19 @@ abstract class AbstractLatinSquare[T] protected (protected val elements: Vector[
   def preservesLatinProperty() : Boolean = {
 		var symbols : Set[T] = Set[T]();
 		
-		//row verification (its enough)
+		//row verification
 		for (i <- 0 to (order - 1)) {
 		  symbols = Set[T]();
 			for (j <- 0 to (order - 1)) {
+				symbols += this.getValueAt(i, j);	
+			}
+			if (symbols.size != order)
+				return false;
+		}
+		//column verification
+		for (j <- 0 to (order - 1)) {
+		  symbols = Set[T]();
+			for (i <- 0 to (order - 1)) {
 				symbols += this.getValueAt(i, j);	
 			}
 			if (symbols.size != order)

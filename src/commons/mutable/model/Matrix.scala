@@ -1,8 +1,6 @@
-package commons.model
+package commons.mutable.model
 
-class Matrix[T](val n: Int) {
-
-  var elements: Array[Array[T]];
+class Matrix[T](val n: Int, var elements: Array[Array[T]]) {
 
   def initialize(elem:T): Unit = {
 
@@ -13,7 +11,7 @@ class Matrix[T](val n: Int) {
     }
   }
   
-  override def apply(i:Int,j:Int) {
+  def apply(i:Int,j:Int) {
     elements(i)(j)
   }
   

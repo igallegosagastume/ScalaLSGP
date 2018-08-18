@@ -1,4 +1,4 @@
-package commons.model.immutable
+package commons.immutable.model
 
 import commons.utils.RandomUtils
 

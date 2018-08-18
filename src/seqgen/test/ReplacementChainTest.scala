@@ -1,6 +1,6 @@
 package seqgen.test
 
-import seqgen.model.SeqGenWithReplacementMap
+import seqgen.model.generators.ReplacementChainLSGenerator
 
 object ReplacementChainTest {
   	/**
@@ -9,11 +9,11 @@ object ReplacementChainTest {
 	 * @param generator
 	 * @param path
 	 */
-	def computeTimeFor(generator: SeqGenWithReplacementMap, progress:Int, showProgress:Boolean, showFinalMessage:Boolean, verbose:Boolean) : Double = {
+	def computeTimeFor(generator: ReplacementChainLSGenerator, progress:Int, showProgress:Boolean, showFinalMessage:Boolean, verbose:Boolean) : Double = {
 		var startTime = System.nanoTime();
 		var ls = generator.generateLS();
 		var endTime = System.nanoTime();
-
+		print("-")
 		var duration :Long = endTime - startTime;
 		var secs :Double = duration/1000000000d;
 		
@@ -21,7 +21,7 @@ object ReplacementChainTest {
 			System.out.println(ls);
 		else
 			if (showProgress) {
-				System.out.println("Progress: "+progress+"%");
+				System.out.println("\nProgress: "+progress+"%");
 			}
 		
 		if (showFinalMessage)
@@ -39,7 +39,7 @@ object ReplacementChainTest {
 
 	
 	
-	def repeatGeneration(generator: SeqGenWithReplacementMap, times:Int) : Unit = {
+	def repeatGeneration(generator: ReplacementChainLSGenerator, times:Int) : Unit = {
 		var startTime = System.nanoTime();
 
 		var verbose:Boolean = false;
@@ -90,7 +90,10 @@ object ReplacementChainTest {
 	}
 
 	def main(args:Array[String]) : Unit = {
-	  var generator = new SeqGenWithReplacementMap(256);
-		repeatGeneration(generator, 1000);
+	  var order:Int = args(0).toInt
+	  var times:Int = args(1).toInt
+	  
+	  var generator = new ReplacementChainLSGenerator(order);
+		repeatGeneration(generator, times);
 	}
 }

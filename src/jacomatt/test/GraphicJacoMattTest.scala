@@ -1,10 +1,11 @@
-package test
+package jacomatt.test
 
 import jacomatt.model.IncidenceCube
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import org.scalactic.source.Position.apply
 
 
 @RunWith(classOf[JUnitRunner])

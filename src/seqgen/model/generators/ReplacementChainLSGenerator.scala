@@ -1,11 +1,12 @@
-package seqgen.model
+package seqgen.model.generators
 
-import commons.model.immutable.AbstractLatinSquare
-import commons.model.immutable.VectorLatinSquare
+import commons.immutable.model.AbstractLatinSquare
+import commons.immutable.model.VectorLatinSquare
 import commons.utils.RandomUtils
 import commons.utils.ControlStructures
+import scala.Vector
 
-class SeqGenWithReplacementMap(val order:Int) {
+class ReplacementChainLSGenerator(val order:Int) {
   
   val allNulls : AbstractLatinSquare[Int] = VectorLatinSquare.getFillableLS(order)
   
@@ -106,13 +107,13 @@ class SeqGenWithReplacementMap(val order:Int) {
 
 }//end class
   
-object SeqGenWithReplacementMap {
+object ReplacementChainLSGenerator {
   
   def main(args:Array[String]) = {
     var i = 0
     while (i < 100) { 
       println(i)
-      val generator = new SeqGenWithReplacementMap(7)
+      val generator = new ReplacementChainLSGenerator(7)
       val ls = generator.generateLS()
       println(ls)
       if (!ls.preservesLatinProperty()) {
