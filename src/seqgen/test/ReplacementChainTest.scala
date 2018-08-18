@@ -92,6 +92,7 @@ object ReplacementChainTest {
     var order: Int = args(0).toInt
     var times: Int = args(1).toInt
 
+    println("Parameters of the test: order of LSs="+order+" repetitions="+times+".")
     var generator = new ReplacementChainLSGenerator(order);
     repeatGeneration(generator, times);
   }
