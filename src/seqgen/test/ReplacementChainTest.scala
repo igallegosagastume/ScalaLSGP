@@ -13,11 +13,6 @@ object ReplacementChainTest {
     var startTime = System.nanoTime();
     var ls = generator.generateLS();
     var endTime = System.nanoTime();
-    //progress bar
-    if (progress % 10 == 0)
-      println("-")
-    else
-      print("-")
 
     var duration: Long = endTime - startTime;
     var secs: Double = duration / 1000000000d;
@@ -69,6 +64,10 @@ object ReplacementChainTest {
         showProgress = false;
       }
       sum += secsForAGen;
+      
+      print("-") //to show progress in the meantime
+      if (i % 100 == 0)
+        println("")
     }
     var endTime = System.nanoTime();
 
@@ -80,12 +79,12 @@ object ReplacementChainTest {
     var averageTime: Double = sum / times;
     System.out.println("");
     if (hours >= 1)
-      System.out.println("Finished " + times + " repetitions of order " + generator.order + " after " + hours + " hours.");
+      System.out.println("Finished " + times + " generations of LSs of order " + generator.order + " after " + hours + " hours.");
     else if (mins >= 1)
-      System.out.println("Finished " + times + " repetitions of order " + generator.order + " after " + mins + " minutes.");
+      System.out.println("Finished " + times + " generations of LSs of order " + generator.order + " after " + mins + " minutes.");
     else
-      System.out.println("Finished " + times + " repetitions of order " + generator.order + " after " + secs + " seconds.");
-    System.out.println("Generation method: replacement chain");
+      System.out.println("Finished " + times + " generations of LSs of order " + generator.order + " after " + secs + " seconds.");
+    System.out.println("Generation method: replacement chain in ScalaLSGP.");
     System.out.println("Average time of method is " + averageTime + " seconds.");
   }
 
