@@ -1,4 +1,4 @@
-package commons.utils
+package ar.com.bluemontag.commons.utils
 
 import scala.collection.mutable.HashSet
 import scala.None

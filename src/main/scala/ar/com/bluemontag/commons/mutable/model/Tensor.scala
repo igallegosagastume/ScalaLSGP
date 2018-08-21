@@ -1,4 +1,4 @@
-package commons.mutable.model
+package ar.com.bluemontag.commons.mutable.model
 
 import scala.collection.mutable.ArraySeq
 

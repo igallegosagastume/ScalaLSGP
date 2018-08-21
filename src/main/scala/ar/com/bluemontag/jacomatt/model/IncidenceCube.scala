@@ -1,12 +1,12 @@
-package jacomatt.model
+package ar.com.bluemontag.jacomatt.model
 
-import commons.mutable.model.AbstractLatinSquare
-import commons.mutable.model.Tensor
-import commons.immutable.model.OrderedTriple
-import commons.utils.RandomUtils
+import ar.com.bluemontag.commons.mutable.model.AbstractLatinSquare
+import ar.com.bluemontag.commons.mutable.model.Tensor
+import ar.com.bluemontag.commons.immutable.model.OrderedTriple
+import ar.com.bluemontag.commons.utils.RandomUtils
 import javax.swing.JFrame
-import commons.utils.DrawingOptions
-import jacomatt.opengl.DrawIncidenceCube
+import ar.com.bluemontag.commons.utils.DrawingOptions
+import ar.com.bluemontag.jacomatt.opengl.DrawIncidenceCube
 
 import java.awt.Frame
 import java.awt.event.WindowAdapter
@@ -18,7 +18,7 @@ import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 import java.awt.Dimension
 
-class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
+class IncidenceCube(override val order:Int) extends AbstractLatinSquare[Int](order:Int) {
   private val tensor = new Tensor[Int](size=order, nullElem=0)//uses a tensor of Int to store elements
   var proper : Boolean = true //it begins from a proper cube
   protected var improperCell : OrderedTriple[Int,Int,Int] = null    //no improper cell at the beggining

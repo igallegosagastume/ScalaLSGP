@@ -2,7 +2,7 @@
  * Creation date: 02/12/2017
  * 
  */
-package commons.utils;
+package ar.com.bluemontag.commons.utils;
 
 public class DrawingOptions {
 

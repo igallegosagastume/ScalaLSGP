@@ -1,10 +1,10 @@
-package commons.immutable.test
+package ar.com.bluemontag.commons.immutable.test
 
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import commons.immutable.model.VectorLatinSquare
+import ar.com.bluemontag.commons.immutable.model.VectorLatinSquare
 import org.scalactic.source.Position.apply
 
 

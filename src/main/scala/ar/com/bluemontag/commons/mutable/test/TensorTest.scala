@@ -1,6 +1,6 @@
-package commons.mutable.test
+package ar.com.bluemontag.commons.mutable.test
 
-import commons.mutable.model.Tensor
+import ar.com.bluemontag.commons.mutable.model.Tensor
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner

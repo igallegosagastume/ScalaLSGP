@@ -1,9 +1,9 @@
-package seqgen.model.generators
+package ar.com.bluemontag.seqgen.model.generators
 
-import commons.immutable.model.AbstractLatinSquare
-import commons.immutable.model.VectorLatinSquare
-import commons.utils.RandomUtils
-import commons.utils.ControlStructures
+import ar.com.bluemontag.commons.immutable.model.AbstractLatinSquare
+import ar.com.bluemontag.commons.immutable.model.VectorLatinSquare
+import ar.com.bluemontag.commons.utils.RandomUtils
+import ar.com.bluemontag.commons.utils.ControlStructures
 import scala.Vector
 
 class ReplacementChainLSGenerator(val order:Int) {

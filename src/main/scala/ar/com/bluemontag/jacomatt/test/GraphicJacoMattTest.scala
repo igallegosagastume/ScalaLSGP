@@ -1,6 +1,6 @@
-package jacomatt.test
+package ar.com.bluemontag.jacomatt.test
 
-import jacomatt.model.IncidenceCube
+import ar.com.bluemontag.jacomatt.model.IncidenceCube
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import org.junit.runner.RunWith
