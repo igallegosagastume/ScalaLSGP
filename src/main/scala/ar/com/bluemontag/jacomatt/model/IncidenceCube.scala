@@ -18,7 +18,7 @@ import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 import java.awt.Dimension
 
-class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
+class IncidenceCube(override val order:Int) extends AbstractLatinSquare[Int](order:Int) {
   private val tensor = new Tensor[Int](size=order, nullElem=0)//uses a tensor of Int to store elements
   var proper : Boolean = true //it begins from a proper cube
   protected var improperCell : OrderedTriple[Int,Int,Int] = null    //no improper cell at the beggining

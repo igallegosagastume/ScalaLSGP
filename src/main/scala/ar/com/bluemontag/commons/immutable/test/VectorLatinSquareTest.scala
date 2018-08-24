@@ -1,4 +1,4 @@
-package commons.immutable.test
+package ar.com.bluemontag.commons.immutable.test
 
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
