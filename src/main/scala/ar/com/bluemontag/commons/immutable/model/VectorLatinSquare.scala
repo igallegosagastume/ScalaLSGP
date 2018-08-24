@@ -1,6 +1,6 @@
-package commons.immutable.model
+package ar.com.bluemontag.commons.immutable.model
 
-import commons.utils.RandomUtils
+import ar.com.bluemontag.commons.utils.RandomUtils
 
 class VectorLatinSquare[T] private (override val elements: Vector[Vector[T]]) extends AbstractLatinSquare[T](elements) {
 

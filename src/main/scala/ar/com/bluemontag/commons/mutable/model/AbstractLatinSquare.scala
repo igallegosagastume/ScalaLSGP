@@ -1,4 +1,4 @@
-package commons.mutable.model
+package ar.com.bluemontag.commons.mutable.model
 
 /**
  * This is the abstract class that represent all implementation of a Latin Square.

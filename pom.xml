@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ar.com.bluemontagsoftware</groupId>
+	<artifactId>scala-lsgp</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<scala.version>2.12.3</scala.version>
+		<scalatest.version>3.0.4</scalatest.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>${scala.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_2.12</artifactId>
+			<version>${scalatest.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest-app_2.12</artifactId>
+			<version>${scalatest.version}</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scala-js</groupId>
+			<artifactId>scalajs-junit-test-runtime_2.12</artifactId>
+			<version>1.0.0-M5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jogamp.jogl</groupId>
+			<artifactId>jogl</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>javax.servlet</groupId> <artifactId>servlet-api</artifactId> 
+			<version>2.5</version> <scope>provided</scope> </dependency> -->
+
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src/main/scala</sourceDirectory>
+		<testSourceDirectory>src/test/scala</testSourceDirectory>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.15</version>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outputDirectory>/target/classes</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<version>2.15.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<scalaVersion>${scala.version}</scalaVersion>
+					<launchers>
+						<launcher>
+							<id>run-scalatest</id>
+							<mainClass>org.scalatest.tools.Runner</mainClass>
+							<args>
+								<arg>-p</arg>
+								<arg>${project.build.testOutputDirectory}</arg>
+							</args>
+							<jvmArgs>
+								<jvmArg>-Xmx512m</jvmArg>
+							</jvmArgs>
+						</launcher>
+					</launchers>
+					<jvmArgs>
+						<jvmArg>-Xms64m</jvmArg>
+						<jvmArg>-Xmx1024m</jvmArg>
+					</jvmArgs>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>

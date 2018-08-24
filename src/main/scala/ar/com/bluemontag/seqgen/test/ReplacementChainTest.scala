@@ -1,7 +1,11 @@
-package seqgen.test
+package ar.com.bluemontag.seqgen.test
 
-import seqgen.model.generators.ReplacementChainLSGenerator
+import ar.com.bluemontag.seqgen.model.generators.ReplacementChainLSGenerator
 
+/**
+ * @author igallegosagas
+ * 
+ */
 object ReplacementChainTest {
   /**
    * Computes the time and generates the LS of requested order.

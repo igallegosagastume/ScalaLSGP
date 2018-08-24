@@ -1,4 +1,4 @@
-package commons.mutable.model
+package ar.com.bluemontag.commons.mutable.model
 
 import scala.collection.mutable.ArraySeq
 
@@ -54,6 +54,12 @@ class Tensor[T](val size: Int, var nullElem: T) {// error: traits or objects may
   def indexOfElem(elem: T, coord1: Int, coord2: Int, axis: Char): Int = {
     return this.indexOfElem(elem, coord1, coord2, axis, 0)
   }
+  
+  def apply(x:Int)(y:Int) : ArraySeq[T] = {
+    this.elements(x)(y)
+  }
+  
+  
   /**
    * It returns the index of the corresponding "axis" that holds "elem"
    */

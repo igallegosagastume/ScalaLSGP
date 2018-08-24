@@ -1,6 +1,6 @@
-package commons.immutable.model
+package ar.com.bluemontag.commons.immutable.model
 
-import commons.utils.RandomUtils
+import ar.com.bluemontag.commons.utils.RandomUtils
 import scala.collection.mutable.Set
 
 abstract class AbstractLatinSquare[T] protected (protected val elements: Vector[Vector[T]]) {

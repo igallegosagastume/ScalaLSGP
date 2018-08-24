@@ -1,4 +1,4 @@
-package jacomatt.opengl
+package ar.com.bluemontag.jacomatt.opengl
 
 import java.awt.event.KeyEvent.VK_DOWN;
 import java.awt.event.KeyEvent.VK_LEFT;
@@ -37,7 +37,7 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
-import jacomatt.model.IncidenceCube
+import ar.com.bluemontag.jacomatt.model.IncidenceCube
 
 class DrawIncidenceCube(protected var cube: IncidenceCube) extends GLEventListener with KeyListener {
   // inicializo el TextRenderer (solo una vez en toda la ejecucion, sino se cuelga!)

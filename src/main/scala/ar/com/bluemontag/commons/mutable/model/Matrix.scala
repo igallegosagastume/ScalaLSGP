@@ -1,4 +1,4 @@
-package commons.mutable.model
+package ar.com.bluemontag.commons.mutable.model
 
 class Matrix[T](val n: Int, var elements: Array[Array[T]]) {
 

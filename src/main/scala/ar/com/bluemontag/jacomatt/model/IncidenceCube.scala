@@ -1,12 +1,12 @@
-package jacomatt.model
+package ar.com.bluemontag.jacomatt.model
 
-import commons.mutable.model.AbstractLatinSquare
-import commons.mutable.model.Tensor
-import commons.immutable.model.OrderedTriple
-import commons.utils.RandomUtils
+import ar.com.bluemontag.commons.mutable.model.AbstractLatinSquare
+import ar.com.bluemontag.commons.mutable.model.Tensor
+import ar.com.bluemontag.commons.immutable.model.OrderedTriple
+import ar.com.bluemontag.commons.utils.RandomUtils
 import javax.swing.JFrame
-import commons.utils.DrawingOptions
-import jacomatt.opengl.DrawIncidenceCube
+import ar.com.bluemontag.commons.utils.DrawingOptions
+import ar.com.bluemontag.jacomatt.opengl.DrawIncidenceCube
 
 import java.awt.Frame
 import java.awt.event.WindowAdapter
@@ -113,7 +113,7 @@ class IncidenceCube(order:Int) extends AbstractLatinSquare[Int](order:Int) {
 	  tensor.indexOfElem(-1, x, y, 'z')
 	}
 	
-	protected def doPlusMinus1Move(t:OrderedTriple[Int,Int,Int], x1:Int, y1:Int, z1:Int) :Unit = {
+	protected def doPlusMinus1Move(t:OrderedTriple[Int,Int,Int], x1:Int, y1:Int, z1:Int) : Unit = {
 	  ++(t.x, t.y, t.z)      //sum 1 to the selected "0" cell
 		++(t.x, y1,  z1)
 		++(x1,  y1,  t.z)
