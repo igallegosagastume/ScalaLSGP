@@ -15,19 +15,7 @@ mvn eclipse:eclipse
 <classpathentry kind="src" path="src/main/scala" including="**/*.scala"/>
 <classpathentry kind="src" path="src/test/scala" output="target/test-classes" including="**/*.scala"/>
 
-4) Edit the .project file to add builder and scala nature:
-
-<buildSpec>
-  <buildCommand>
-    <name>org.scala-ide.sdt.core.scalabuilder</name>
-  </buildCommand>
-</buildSpec>
-<natures>
-  <nature>org.scala-ide.sdt.core.scalanature</nature>
-  <nature>org.eclipse.jdt.core.javanature</nature>
-</natures>
-
-(or just replace ".project" file by "dotproject.txt" file
+4) Replace the ".project" file by "dotproject.txt" file to add scala nature and builder
 
 5) Refresh, clean project and compile from eclipse.
 
