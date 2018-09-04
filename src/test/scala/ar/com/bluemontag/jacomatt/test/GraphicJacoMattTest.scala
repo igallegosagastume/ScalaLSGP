@@ -5,13 +5,14 @@ import org.scalatest.Matchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalactic.source.Position.apply
+import ar.com.bluemontag.jacomatt.model.IncidenceCube
 import ar.com.bluemontag.jacomatt.model.EfficientIncidenceCube
 
 
 @RunWith(classOf[JUnitRunner])
 class GraphicJacoMattTest extends FlatSpec with Matchers {
 
-  /*"An incidence cube" should "know how to print itself in the console" in {
+  "An incidence cube" should "know how to print itself in the console" in {
     
     var ic = new IncidenceCube(20)
     ic.shuffle()
@@ -27,9 +28,9 @@ class GraphicJacoMattTest extends FlatSpec with Matchers {
     ic.drawIncidenceCube()
     
     Thread.sleep(30000);
-  }*/
+  }
   
-  "A efficient incidence cube" should "graphic itself in 3D and allow user interaction" in {
+  "An optimized incidence cube" should "graphic itself in 3D and allow user interaction" in {
   
     var ic = new EfficientIncidenceCube(20)
     
