@@ -5,6 +5,7 @@ import org.scalatest.Matchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import ar.com.bluemontag.commons.immutable.model.VectorLatinSquare
+import org.scalactic.source.Position.apply
 
 @RunWith(classOf[JUnitRunner])
 class VectorLSTest extends FlatSpec with Matchers {

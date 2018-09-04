@@ -1,4 +1,4 @@
-package ar.com.bluemontag.seqgen.model.generators
+package ar.com.bluemontag.seqgen.generators
 
 import ar.com.bluemontag.commons.immutable.model.AbstractLatinSquare
 import ar.com.bluemontag.commons.immutable.model.VectorLatinSquare

@@ -1,6 +1,6 @@
 package ar.com.bluemontag.seqgen.test
 
-import ar.com.bluemontag.seqgen.model.generators.ReplacementChainLSGenerator
+import ar.com.bluemontag.seqgen.generators.ReplacementChainLSGenerator
 
 /**
  * @author igallegosagas
