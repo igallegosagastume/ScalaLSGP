@@ -35,8 +35,6 @@ class GraphicJacoMattTest extends FlatSpec with Matchers {
     var ic = new OptimizedIncidenceCube(20)
     
     ic.shuffle()
-    
-    println(ic)
     ic.drawIncidenceCube()
     
     Thread.sleep(10000);

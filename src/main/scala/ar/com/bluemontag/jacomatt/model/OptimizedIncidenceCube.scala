@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import ar.com.bluemontag.commons.utils.RandomUtils
 import ar.com.bluemontag.commons.immutable.model.OrderedTriple;
 import ar.com.bluemontag.commons.utils.DrawingOptions
-import ar.com.bluemontag.commons.mutable.model.AbstractLatinSquare
+import ar.com.bluemontag.commons.mutable.model.MutableLatinSquare
 import ar.com.bluemontag.commons.mutable.model.Tensor
 import scala.collection.mutable.ArraySeq
 
@@ -137,6 +137,10 @@ class OptimizedIncidenceCube(override val order:Int) extends IncidenceCube(order
 		else return (-a)
 	}
 	
+	override def getValueAt(x:Int, y:Int) : Int = {
+	  this.plusOneZCoordOf(x,y)
+	}
+	
 	def coordOf(x:Int, y:Int, z:Int) : Int = {
 		if (xyMatrix(x)(y).contains(z)) {
 			return 1;
@@ -179,11 +183,6 @@ class OptimizedIncidenceCube(override val order:Int) extends IncidenceCube(order
 	}
 	
 	override def minusOneCoordOf(x:Int, y:Int) : Int = {
-//		var firstNegative = xyMatrix(x)(y).indexWhere(_ < 0)
-//		if (firstNegative>=0)
-//			return xyMatrix(x)(y)(firstNegative);
-//		else
-//			return -1;
 	  val z = this.indexOfFirstNegativeElem(xyMatrix(x)(y))
 		if (z >= 0)
 			return (xyMatrix(x)(y)(z).abs)
