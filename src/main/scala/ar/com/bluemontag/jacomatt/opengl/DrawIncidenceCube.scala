@@ -209,18 +209,20 @@ class DrawIncidenceCube(protected var cube: IncidenceCube) extends GLEventListen
         if (zp != (-1)) { //if the point exists (it must)
           this.drawPointPlus1ColorAsFunction(gl, xp, yp, zp);
         }
-        zp = cube.minusOneCoordOf(xp, yp);
-        if (zp != (-1)) {
-          //if cube is improper and this x,y contains a -1
-          
-          this.drawPointMinus1(gl, xp, yp, zp);
-
-          zp = cube.secondPlusOneZCoordOf(xp, yp);
-          if (zp != (-1))
-            this.drawPointPlus1ColorAsFunction(gl, xp, yp, zp);
-
-        } //if there is a -1
-
+        
+        if (!cube.proper) {
+          zp = cube.minusOneCoordOf(xp, yp);
+          if (zp != (-1)) {
+            //if cube is improper and this x,y contains a -1
+            
+            this.drawPointMinus1(gl, xp, yp, zp);
+  
+            zp = cube.secondPlusOneZCoordOf(xp, yp);
+            if (zp != (-1))
+              this.drawPointPlus1ColorAsFunction(gl, xp, yp, zp);
+  
+          } //if there is a -1
+        }//if not proper
       } //for yp
     } //for xp
     //

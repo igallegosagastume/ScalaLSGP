@@ -48,7 +48,10 @@ object RandomUtils {
   }
 
   def getNullElem(): /*Option[*/Int = {
-    9999
+    -9999990
   }
 
+  def getMinus0Elem(): /*Option[*/Int = {
+    -9999999
+  }
 }

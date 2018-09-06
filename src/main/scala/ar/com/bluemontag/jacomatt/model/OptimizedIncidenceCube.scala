@@ -23,19 +23,24 @@ import ar.com.bluemontag.commons.mutable.model.Tensor
 import scala.collection.mutable.ArraySeq
 
 /**
+ *  This is a more efficient implementation of a Jacobson & Matthews' incidence cube.
+ *  
+ *  It has 3 views of the same cube, to save time when looking for the 1's and 0's along each axis.
+ *  
+ * 
  * @author Ignacio Gallego Sagastume
  * @email ignaciogallego@gmail.com
+ * 
  * @tags Java Latin Square generation
  */
 
-class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order:Int) {
+class OptimizedIncidenceCube(override val order:Int) extends IncidenceCube(order:Int) {
 	val nullInt:Int = RandomUtils.getNullElem() //a number outside the scope of symbols
-	val minus0 :Int = -10000
+	val minus0 :Int = RandomUtils.getMinus0Elem()
+	
 	//Each view is stored as a two-dimensional array, 
 	//to avoid sequential searches for "1" elements along the cube
 	//the lists store all possible values of the third coordinate
-	
-	
 	val xyMatrix :ArraySeq[ArraySeq[ArraySeq[Int]]] = new ArraySeq(order)
 	val yzMatrix :ArraySeq[ArraySeq[ArraySeq[Int]]] = new ArraySeq(order)
 	val xzMatrix :ArraySeq[ArraySeq[ArraySeq[Int]]] = new ArraySeq(order)
@@ -133,7 +138,7 @@ class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order
 	}
 	
 	def coordOf(x:Int, y:Int, z:Int) : Int = {
-		if (xyMatrix(x)(y).contains( z)) {
+		if (xyMatrix(x)(y).contains(z)) {
 			return 1;
 		} else if (xyMatrix(x)(y).contains( minus(z))) {
 			return -1;
@@ -143,15 +148,15 @@ class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order
 	}
 	
 	override def plusOneZCoordOf(x:Int, y:Int) : Int = {
-		var firstPositive = xyMatrix(x)(y).indexWhere(_ > 0)
+		var firstPositive = xyMatrix(x)(y).indexWhere(_ >= 0)
 		if (firstPositive >= 0)
 			return xyMatrix(x)(y)(firstPositive);
 		else
 			return -1;
 	}
 	override def secondPlusOneZCoordOf(x:Int, y:Int) : Int = {
-	  val firstPositive = xyMatrix(x)(y).indexWhere(_ > 0)
-		var sndPositive = xyMatrix(x)(y).indexWhere(_ > 0, firstPositive) 
+	  val firstPositive = xyMatrix(x)(y).indexWhere(_ >= 0)
+		var sndPositive = xyMatrix(x)(y).indexWhere(_ >= 0, firstPositive) 
 		if (sndPositive>=0)
 			return xyMatrix(x)(y)(sndPositive);
 		else
@@ -159,25 +164,51 @@ class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order
 	}
 	
 	override def plusOneXCoordOf(y:Int, z:Int) : Int = {
-		var firstPositive = yzMatrix(y)(z).indexWhere(_ > 0)
+		var firstPositive = yzMatrix(y)(z).indexWhere(_ >= 0)
 		if (firstPositive >= 0)
 			return yzMatrix(y)(z)(firstPositive);
 		else
 			return -1;
 	}
 	override def plusOneYCoordOf(x:Int, z:Int) : Int = {
-		var firstPositive = xzMatrix(x)(z).indexWhere(_ > 0)
+		var firstPositive = xzMatrix(x)(z).indexWhere(_ >= 0)
 		if (firstPositive>=0)
 			return xzMatrix(x)(z)(firstPositive);
 		else
 			return -1;
 	}
-	override def minusOneCoordOf(x:Int, y:Int) :Int = {
-		var firstNegative = xyMatrix(x)(y).indexWhere(_ < 0)
-		if (firstNegative>=0)
-			return xyMatrix(x)(y)(firstNegative);
+	
+	override def minusOneCoordOf(x:Int, y:Int) : Int = {
+//		var firstNegative = xyMatrix(x)(y).indexWhere(_ < 0)
+//		if (firstNegative>=0)
+//			return xyMatrix(x)(y)(firstNegative);
+//		else
+//			return -1;
+	  val z = this.indexOfFirstNegativeElem(xyMatrix(x)(y))
+		if (z >= 0)
+			return (xyMatrix(x)(y)(z).abs)
 		else
-			return -1;
+			return -1
+	}
+	
+	protected def indexOfFirstNegativeElem(arr:ArraySeq[Int]) : Int = {
+		this.indexOfFirstNegativeElemStartingAt(arr, 0)
+	}
+	
+	/**
+	 * To search for a "negative" element, must skip the nullInts (that are a negative constant)
+	 */
+	protected def indexOfFirstNegativeElemStartingAt(arr:ArraySeq[Int], index:Int) : Int = {
+		var i = -1
+		var found : Boolean = false
+		var j = index
+		while (j < arr.length && !found) {
+			found = ((arr(j)< 0) && (arr(j) != nullInt)) //found
+			if (found)
+				i = j //save the index
+			j = j + 1
+		}
+		return i
 	}
 	
 	override def doPlusMinus1Move(t:OrderedTriple[Int,Int,Int], x1:Int, y1:Int, z1:Int) {
@@ -234,13 +265,13 @@ class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order
 	
 	override def choosePlusOneZCoordOf(x:Int, y:Int) : Int = {
 		var takeFirst = (RandomUtils.pickAnInt(2) == 1);
-		var z = xyMatrix(x)(y).indexWhere(_ > 0)
+		var z = xyMatrix(x)(y).indexWhere(_ >= 0)
 		if (z == -1)
 			return -1;
 		if (takeFirst)
 			return xyMatrix(x)(y)(z); 
 		else {
-			z = xyMatrix(x)(y).indexWhere(_ > 0, z+1);
+			z = xyMatrix(x)(y).indexWhere(_ >= 0, z+1);
 			if (z == -1)
 				return -1;
 			return xyMatrix(x)(y)(z);
@@ -248,13 +279,13 @@ class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order
 	}
 	override def choosePlusOneXCoordOf(y:Int, z:Int) : Int = {
 		var takeFirst = (RandomUtils.pickAnInt(2) == 1);
-		var x = yzMatrix(y)(z).indexWhere(_ > 0)
+		var x = yzMatrix(y)(z).indexWhere(_ >= 0)
 		if (x == -1)
 			return -1;
 		if (takeFirst)
 			return yzMatrix(y)(z)(x);
 		else {
-			x = yzMatrix(y)(z).indexWhere(_ > 0, x+1);
+			x = yzMatrix(y)(z).indexWhere(_ >= 0, x+1);
 			if (x == -1)
 				return -1;
 			return yzMatrix(y)(z)(x);
@@ -262,13 +293,13 @@ class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order
 	}
 	override def choosePlusOneYCoordOf(x:Int, z:Int) : Int = {
 		var takeFirst = (RandomUtils.pickAnInt(2) == 1);
-		var y = xzMatrix(x)(z).indexWhere(_ > 0)
+		var y = xzMatrix(x)(z).indexWhere(_ >= 0)
 		if (y == -1)
 			return -1;
 		if (takeFirst)
 			return xzMatrix(x)(z)(y); 
 		else {
-			y = xzMatrix(x)(z).indexWhere(_ > 0, y+1);
+			y = xzMatrix(x)(z).indexWhere(_ >= 0, y+1);
 			if (y == -1)
 				return -1;
 			return xzMatrix(x)(z)(y);

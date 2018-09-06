@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalactic.source.Position.apply
 import ar.com.bluemontag.jacomatt.model.IncidenceCube
-import ar.com.bluemontag.jacomatt.model.EfficientIncidenceCube
+import ar.com.bluemontag.jacomatt.model.OptimizedIncidenceCube
 
 
 @RunWith(classOf[JUnitRunner])
@@ -27,18 +27,18 @@ class GraphicJacoMattTest extends FlatSpec with Matchers {
     ic.shuffle()
     ic.drawIncidenceCube()
     
-    Thread.sleep(30000);
+    Thread.sleep(10000);
   }
   
   "An optimized incidence cube" should "graphic itself in 3D and allow user interaction" in {
   
-    var ic = new EfficientIncidenceCube(20)
+    var ic = new OptimizedIncidenceCube(20)
     
     ic.shuffle()
     
     println(ic)
     ic.drawIncidenceCube()
     
-    Thread.sleep(30000);
+    Thread.sleep(10000);
   }
 }
