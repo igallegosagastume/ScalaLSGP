@@ -8,16 +8,18 @@
 	<artifactId>scala-lsgp</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1</version>
-
+	<name>ScalaLSGP</name>
+	<url>http://bluemontagsoftware.blogspot.com/</url>
+	
 	<properties>
-		<scala.version>2.12.3</scala.version>
+		<scala.version>2.12.6</scala.version>
 		<scalatest.version>3.0.4</scalatest.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 		<opengl.version>2.1.2</opengl.version>
-		<junit.jupiter.version>5.3.0</junit.jupiter.version>
+		<!-- <junit.jupiter.version>5.3.0</junit.jupiter.version>  -->
 	</properties>
 
 	<dependencies>
@@ -28,16 +30,18 @@
 			<version>${scala.version}</version>
 			<type>pom</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_2.12</artifactId>
 			<version>${scalatest.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 
-		<!-- JUnit5 minimum dependencies (api, engine, params, launcher) ===> NOT 
-			SUPPORTED YET <==== <dependency> <groupId>org.junit.jupiter</groupId> <artifactId>junit-jupiter-api</artifactId> 
+		<!-- JUnit5 minimum dependencies (api, engine, params, launcher) ===> NOT SUPPORTED YET <====
+		
+		<dependency> <groupId>org.junit.jupiter</groupId> <artifactId>junit-jupiter-api</artifactId> 
 			<version>${junit.jupiter.version}</version> <scope>test</scope> </dependency> 
 			<dependency> <groupId>org.junit.jupiter</groupId> <artifactId>junit-jupiter-engine</artifactId> 
 			<version>${junit.jupiter.version}</version> <scope>test</scope> </dependency> 
