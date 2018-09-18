@@ -25,7 +25,9 @@ import scala.collection.mutable.ArraySeq
 /**
  * @author Ignacio Gallego Sagastume
  * @email ignaciogallego@gmail.com
- * @tags Java Latin Square generation
+ * 
+ * 
+ * @tags Scala Latin Square generation package
  */
 
 class EfficientIncidenceCube(override val order:Int) extends IncidenceCube(order:Int) {
