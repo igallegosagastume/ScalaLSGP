@@ -6,15 +6,15 @@ import ar.com.bluemontag.commons.utils.RandomUtils
 import ar.com.bluemontag.commons.utils.ControlStructures
 import scala.Vector
 import ar.com.bluemontag.commons.generators.AbstractLSGenerator
+import ar.com.bluemontag.commons.LatinSquare
 
 /**
  * @author igallegosagas
  * 
  */
 class ReplacementChainLSGenerator(override val order: Int) extends AbstractLSGenerator(order) {
-  val allNulls: ImmutableLatinSquare[Int] = VectorLatinSquare.getFillableLS(order)
 
-  override def generateLS(): ImmutableLatinSquare[Int] = {
+  override def generateLS(): LatinSquare[Int] = {
 
     val ls0 = VectorLatinSquare.getFillableLS(order) //get empty matrix
 
@@ -26,7 +26,7 @@ class ReplacementChainLSGenerator(override val order: Int) extends AbstractLSGen
   def generateRow(i: Int, partialLatinSquare: VectorLatinSquare[Int]): VectorLatinSquare[Int] = {
     val emptyRow = Vector()
 
-    val row = this.generateRowWithPartialRow(i, 0, partialLatinSquare, emptyRow) //Vector.tabulate(partialLatinSquare.order)(j => generateElem(i, j, partialLatinSquare) )
+    val row = this.generateRowWithPartialRow(i, 0, partialLatinSquare, emptyRow)
 
     partialLatinSquare.setRow(i, row)
   }
@@ -39,8 +39,10 @@ class ReplacementChainLSGenerator(override val order: Int) extends AbstractLSGen
       val elem = this.generateElem(i, j, partialLS, partialRow)
 
       if (!partialRow.contains(elem)) {
+        
         this.generateRowWithPartialRow(i, j + 1, partialLS, partialRow :+ elem)
-      } else {
+        
+      } else {//collision elem is in partialRow
         val emptyPath = Vector()
 
         val partialRowWithElem = partialRow :+ elem
