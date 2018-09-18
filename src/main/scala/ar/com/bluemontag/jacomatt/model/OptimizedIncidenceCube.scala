@@ -326,4 +326,3 @@ class OptimizedIncidenceCube(override val order:Int) extends IncidenceCube(order
 		this.drawingOptions = drawingOptions;
 	}
 }
-
