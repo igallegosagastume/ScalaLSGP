@@ -1,19 +1,20 @@
-package ar.com.bluemontag.seqgen.model.generators
+package ar.com.bluemontag.seqgen.generators
 
-import ar.com.bluemontag.commons.immutable.model.AbstractLatinSquare
+import ar.com.bluemontag.commons.immutable.model.ImmutableLatinSquare
 import ar.com.bluemontag.commons.immutable.model.VectorLatinSquare
 import ar.com.bluemontag.commons.utils.RandomUtils
 import ar.com.bluemontag.commons.utils.ControlStructures
 import scala.Vector
+import ar.com.bluemontag.commons.generators.AbstractLSGenerator
 
 /**
  * @author igallegosagas
  * 
  */
-class ReplacementChainLSGenerator(val order: Int) {
-  val allNulls: AbstractLatinSquare[Int] = VectorLatinSquare.getFillableLS(order)
+class ReplacementChainLSGenerator(override val order: Int) extends AbstractLSGenerator(order) {
+  val allNulls: ImmutableLatinSquare[Int] = VectorLatinSquare.getFillableLS(order)
 
-  def generateLS(): VectorLatinSquare[Int] = {
+  override def generateLS(): ImmutableLatinSquare[Int] = {
 
     val ls0 = VectorLatinSquare.getFillableLS(order) //get empty matrix
 
@@ -30,7 +31,7 @@ class ReplacementChainLSGenerator(val order: Int) {
     partialLatinSquare.setRow(i, row)
   }
 
-  protected def generateRowWithPartialRow(i: Int, j: Int, partialLS: AbstractLatinSquare[Int], partialRow: Vector[Int]): Vector[Int] = {
+  protected def generateRowWithPartialRow(i: Int, j: Int, partialLS: ImmutableLatinSquare[Int], partialRow: Vector[Int]): Vector[Int] = {
 
     if (partialRow.size == partialLS.order) {
       partialRow
@@ -61,7 +62,7 @@ class ReplacementChainLSGenerator(val order: Int) {
   }
   
   private def makeRoomForElem(elem: Int, prevIdx: Int,
-                              partialLS: AbstractLatinSquare[Int],
+                              partialLS: ImmutableLatinSquare[Int],
                               currentRow: Vector[Int],
                               availInRow: Vector[Int],
                               path: Vector[Int]): Vector[Int] = {
@@ -94,7 +95,7 @@ class ReplacementChainLSGenerator(val order: Int) {
     }
   }
 
-  private def generateElem(i: Int, j: Int, partialLS: AbstractLatinSquare[Int], partialRow: Vector[Int]): Int = {
+  private def generateElem(i: Int, j: Int, partialLS: ImmutableLatinSquare[Int], partialRow: Vector[Int]): Int = {
     val availInRow = partialLS.allNumsVector.diff(partialRow)
     val availInCol = partialLS.availInCol(j)
     val availInPos = availInRow.intersect(availInCol)

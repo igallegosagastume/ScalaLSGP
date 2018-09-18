@@ -1,6 +1,6 @@
 package ar.com.bluemontag.jacomatt.model
 
-import ar.com.bluemontag.commons.mutable.model.AbstractLatinSquare
+import ar.com.bluemontag.commons.mutable.model.MutableLatinSquare
 import ar.com.bluemontag.commons.mutable.model.Tensor
 import ar.com.bluemontag.commons.immutable.model.OrderedTriple
 import ar.com.bluemontag.commons.utils.RandomUtils
@@ -18,7 +18,7 @@ import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 import java.awt.Dimension
 
-class IncidenceCube(override val order:Int) extends AbstractLatinSquare[Int](order:Int) {
+class IncidenceCube(override val order:Int) extends MutableLatinSquare[Int](order:Int) {
   private val tensor = new Tensor[Int](size=order, nullElem=0)//uses a tensor of Int to store elements
   var proper : Boolean = true //it begins from a proper cube
   protected var improperCell : OrderedTriple[Int,Int,Int] = null    //no improper cell at the beggining
@@ -53,23 +53,6 @@ class IncidenceCube(override val order:Int) extends AbstractLatinSquare[Int](ord
 	 */
 	override def setValueAt(row:Int, column:Int, value:Int):Unit = {
 	  tensor.setElemAt(row, column, value, 1) //puts a bit ON , in the coordinates correspondant to the 3 values (x,y,z)
-	}
-
-	/**
-	 * A LS implementation must know how to write to file.
-	 * 
-	 * @param fileName
-	 */
-	def writeToFile(fileName:String) : Unit = {
-	  System.out.println("Incidence cube written to "+fileName)
-	}
-	
-	/**
-	 *  Check if the structure has repetitions in some row or column.
-	 *  
-	 */
-	def preservesLatinProperty():Boolean = {
-	  true
 	}
 
 	//*************** Jacobson & Matthews moves implementation
@@ -290,7 +273,7 @@ class IncidenceCube(override val order:Int) extends AbstractLatinSquare[Int](ord
 		sb.append("Incidence cube of size "+order+":\n");
 		
 		var x = order-1
-		while (x >=0) {//the first upper line is the n-1 x coordinate
+		while (x >= 0) {//the first upper line is the n-1 x coordinate
 			for (y <- 0 to (order-1)) {
 				try {
 					val elem = this.getValueAt(x, y);

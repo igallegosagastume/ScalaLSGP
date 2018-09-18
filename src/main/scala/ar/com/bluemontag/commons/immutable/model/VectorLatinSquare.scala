@@ -2,7 +2,7 @@ package ar.com.bluemontag.commons.immutable.model
 
 import ar.com.bluemontag.commons.utils.RandomUtils
 
-class VectorLatinSquare[T] private (override val elements: Vector[Vector[T]]) extends AbstractLatinSquare[T](elements) {
+class VectorLatinSquare[T] private (override val elements: Vector[Vector[T]]) extends ImmutableLatinSquare[T](elements) {
 
   //val vec = Vector.fill(order, order)(nullElem)
   //Vector.tabulate(3,3){ (i,j) => 3*i+j+1 }
